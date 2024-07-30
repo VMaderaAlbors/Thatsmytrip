@@ -74,7 +74,7 @@ function App() {
   // const { isLoaded } = useLoadScript({
   //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
   // });
-  const API_KEY = 'AIzaSyA6y0oyQCZhjfQtsxnq-GQNWlF24cp0p80';
+  const API_KEY = 'MY API KEY HERE';
 
 
 
