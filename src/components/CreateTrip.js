@@ -42,7 +42,7 @@ function CreateTrip() {
 
 
     const URL = 'http://localhost:3000/trips';
-    const API_KEY = 'AIzaSyA6y0oyQCZhjfQtsxnq-GQNWlF24cp0p80';
+    
     // setting the selected place upon change selection
     useEffect(() => {
 
