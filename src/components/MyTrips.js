@@ -55,7 +55,7 @@ function MyTrips() {
                     }
 
                 } else {
-                    console.log("API not accessed");
+                    setMsg("API not accessed, please try again later");
                 }
             });
         });
@@ -64,6 +64,7 @@ function MyTrips() {
     }, [placesService, tripList]);
 
     useEffect(() => {
+        console.log(detailedTripList)
     }, [detailedTripList])
     useEffect(() => {
         if (!(account.username === null)) {
@@ -118,7 +119,7 @@ function MyTrips() {
                     <div className='text-center mb-5' >
                         <h2>My Trips</h2>
                     </div>
-                    <div className='row'>
+                    <div className='row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2 g-lg-3'>
                         {/* Each trip needs to be able to click---implement click function to set current trip to selected trip */}
                         {detailedTripList.map((trip, index) => (
                             <TripCard key={index} trip={trip} handleSelect={handleSelect} />

@@ -17,6 +17,7 @@ function ItineraryMap() {
     const placesLib = useMapsLibrary("places");
     const [placesService, setPlacesService] = useState(null);
     const [routes, setRoutes] = useState([]);
+    const [selectedDay, setSelectedDay] = useState(0);
     // constructing PlacesServise library
     useEffect(() => {
         if (placesLib) {
@@ -34,9 +35,10 @@ function ItineraryMap() {
 
 
     useEffect(() => {
-        if (response.status !== "OK" || dayTrip.length > 0) return;
 
+        if (response.status !== "OK" || dayTrip.length > 0) return;
         setRoutes(response.routes[0]);
+
 
         let optimizeWaypoints = response.geocoded_waypoints;
         // checking that place_id from POI matches the response
@@ -122,11 +124,13 @@ function ItineraryMap() {
                 dailyPoi.push(day)
             }
             setDayTrip(dailyPoi);
+
         }
         divideTrip();
     }, [poiDetail]);
     // changing selectedPoi to specific day
     function handleDayChange(index) {
+        setSelectedDay(index);
         if (dayTrip[index]) {
             setSelectedPoi(dayTrip[index]);
         }
@@ -143,7 +147,13 @@ function ItineraryMap() {
             }
         }
         setArrayOfDays(addingDays);
+
     }, [dayTrip]);
+
+    useEffect(() => {
+        if (response.status !== "OK") return;
+        setRoutes(response.routes[0]);
+    }, [response])
 
     return (
         <div className="container mt-5">
@@ -151,7 +161,7 @@ function ItineraryMap() {
                 <div className="row justify-content-center ">
                     <div className="col details">
                         {arrayOfDays.map((day, index) => {
-                            return <DayTrip handleDayChange={handleDayChange} index={index} day={day} legs={routes.legs} />
+                            return <DayTrip handleDayChange={handleDayChange} index={index} day={day} legs={routes.legs} selectedDay={selectedDay} />
                         })}
                     </div>
                     <div className="col">

@@ -39,10 +39,11 @@ function CreateTrip() {
 
     const [selectedPlace, setSelectedPlace] = useState(null);
     const [msg, setMsg] = useState(null);
+    const [msgNum, setMsgNum] = useState(null);
 
 
     const URL = 'http://localhost:3000/trips';
-    const API_KEY = 'AIzaSyA6y0oyQCZhjfQtsxnq-GQNWlF24cp0p80';
+
     // setting the selected place upon change selection
     useEffect(() => {
 
@@ -61,6 +62,12 @@ function CreateTrip() {
 
     }
     function handleDays(e) {
+        if (e.target.value > 0 && e.target.value <= 30 && !e.target.value.includes('.')) {
+            setMsgNum(null)
+            tempDispatch({ type: "days", value: e.target.value });
+        } else {
+            setMsgNum("Enter a number between 1 to 30");
+        }
 
         tempDispatch({ type: "days", value: e.target.value });
 
@@ -69,6 +76,10 @@ function CreateTrip() {
     async function handleCreation(e) {
         e.preventDefault()
         const token = account.token;
+        if (!newTrip.tempTripName || !newTrip.tempTripDays || !newTrip.tempTripDestination) {
+            setMsg("All fields are required.");
+            return;
+        }
         dispatch({ type: "resetTrip" });
 
         // might need a revision
@@ -94,7 +105,7 @@ function CreateTrip() {
 
             } catch (error) {
                 // Add error handling maybe displaying a message
-                setMsg(error);
+                setMsg("Failed to create trip. Please try again.");
             }
             dispatch({ type: "tripName", value: newTrip.tempTripName });
             dispatch({ type: "destination", value: newTrip.tempTripDestination });
@@ -116,20 +127,23 @@ function CreateTrip() {
 
 
 
-            if (trip.tripName) {
+            if (newTrip.tempTripName) {
 
                 handleNavigate();
+            } else {
+                setMsg("Trip name is required.");
             }
         }
     }
     // function to navigate to POI
     const handleNavigate = () => navigate('/POI');
     return (
-        <div >
+        <div className='col-5'>
 
             <div className='mt-5'>
                 <h3>Create a new trip:</h3>
             </div>
+            <p className='text-danger'>{msg}</p>
             <form>
                 <div className="mb-3">
                     <label className="form-label" >Name your trip:</label>
@@ -137,14 +151,15 @@ function CreateTrip() {
                 </div>
 
 
-                <PlacesAutocomplete onPlaceSelect={setSelectedPlace} />
+                <PlacesAutocomplete onPlaceSelect={setSelectedPlace} required />
 
 
                 <div className="mb-3">
                     <label className="form-label" >Select how many days:</label>
-                    <input className="form-control" type="number" id="days" value={newTrip.tempTripDays} onChange={handleDays} min="1" max="30" />
+                    <p className='text-danger'>{msgNum}</p>
+                    <input className="form-control" type="number" id="days" step="1" value={newTrip.tempTripDays} onChange={handleDays} min="1" max="30" required />
                 </div>
-                <button className="btn btn-dark mb-5" onClick={handleCreation}>Create new trip</button>
+                <button type='submit' className="btn btn-dark mb-5" onClick={handleCreation}>Create new trip</button>
             </form>
         </div>
     )

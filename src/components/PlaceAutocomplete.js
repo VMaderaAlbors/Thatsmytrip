@@ -36,7 +36,7 @@ function PlaceAutocomplete({ onPlaceSelect }) {
     }, [onPlaceSelect, placeAutocomplete]);
     return (
         <div className="autocomplete-container mb-3">
-            <label className="form-label" >Select your destination:</label>
+            <label className="form-label" >Select a city:</label>
             <input className="form-control" ref={inputRef} required />
         </div>
     );
